@@ -1,51 +1,201 @@
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/26466516/141659551-d7ba5630-7200-46fe-863b-87818dae970a.png" alt="Next.js TypeScript Starter">
-</p>
+# JalanRusak Web Application
 
-<br />
+A citizen-driven web application for reporting damaged roads in Indonesia. Built with Next.js 15, React 19, and TypeScript.
 
-<div align="center"><strong>Non-opinionated TypeScript starter for Next.js</strong></div>
-<div align="center">Highly scalable foundation with the best DX. All the tools you need to build your next project.</div>
+## 🚀 Features
 
-<br />
+- **User Authentication**: Secure registration, login, and password reset
+- **Report Damaged Roads**: Submit road damage reports with GPS coordinates and photos
+- **Interactive Maps**: Mark damaged road locations using Leaflet maps
+- **Report Management**: View, filter, and track the status of reports
+- **Responsive Design**: Mobile-friendly interface with Tailwind CSS
+- **Type-Safe**: Full TypeScript implementation with Zod validation
 
-<div align="center">
-  <img src="https://img.shields.io/static/v1?label=PRs&message=welcome&style=flat-square&color=5e17eb&labelColor=000000" alt="PRs welcome!" />
+## 🛠️ Tech Stack
 
-  <img alt="License" src="https://img.shields.io/github/license/jpedroschmitz/typescript-nextjs-starter?style=flat-square&color=5e17eb&labelColor=000000">
+- **Framework**: Next.js 15 (App Router)
+- **UI Library**: React 19
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Maps**: Leaflet & React-Leaflet
+- **Forms**: React Hook Form + Zod validation
+- **HTTP Client**: Axios with automatic token refresh
+- **Date Formatting**: date-fns
 
-  <a href="https://x.com/intent/follow?screen_name=jpedroschmitz">
-    <img src="https://img.shields.io/twitter/follow/jpedroschmitz?style=flat-square&color=5e17eb&labelColor=000000" alt="Follow @jpedroschmitz" />
-  </a>
-</div>
+## 📋 Prerequisites
 
-<div align="center">
-  <sub>Created by <a href="https://x.com/jpedroschmitz">João Pedro</a> with the help of many <a href="https://github.com/jpedroschmitz/typescript-nextjs-starter/graphs/contributors">wonderful contributors</a>.</sub>
-</div>
+- Node.js 18.x or higher
+- pnpm (recommended) or npm/yarn
+- Running JalanRusak backend API (default: `http://localhost:8080/api/v1`)
 
-<br />
+## 🔧 Installation
 
-## Features
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-url>
+   cd jalanrusak-web-app
+   ```
 
-- ⚡️ Next.js 15 (App Router)
-- ⚛️ React 19
-- ⛑ TypeScript
-- 📏 ESLint 9 — To find and fix problems in your code
-- 💖 Prettier — Code Formatter for consistent style
-- 🐶 Husky — For running scripts before committing
-- 🚓 Commitlint — To make sure your commit messages follow the convention
-- 🖌 Renovate — To keep your dependencies up to date
-- 🚫 lint-staged — Run ESLint and Prettier against staged Git files
-- 👷 PR Workflow — Run Type Check & Linters on Pull Requests
-- ⚙️ EditorConfig - Consistent coding styles across editors and IDEs
-- 🗂 Path Mapping — Import components or images using the `@` prefix
-- 🔐 CSP — Content Security Policy for enhanced security (default minimal policy)
-- 🧳 T3 Env — Type-safe environment variables
-- 🪧 Redirects — Easily add redirects to your application
+2. **Install dependencies**:
+   ```bash
+   pnpm install
+   ```
 
-## Quick Start
+3. **Configure environment variables**:
+   Create a `.env.local` file in the root directory:
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:8080/api/v1
+   ```
 
-The best way to start with this template is using [Create Next App](https://nextjs.org/docs/api-reference/create-next-app).
+4. **Start the development server**:
+   ```bash
+   pnpm dev
+   ```
+
+5. **Open your browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 📁 Project Structure
+
+```
+src/
+├── app/                          # Next.js app router pages
+│   ├── dashboard/                # Protected dashboard area
+│   │   ├── layout.tsx            # Dashboard layout with navigation
+│   │   ├── page.tsx              # Dashboard home with stats
+│   │   └── reports/              # Reports management
+│   │       ├── create/           # Create new report
+│   │       ├── [id]/             # View report details
+│   │       └── page.tsx          # List all reports
+│   ├── login/                    # Login page
+│   ├── register/                 # Registration page
+│   ├── forgot-password/          # Password reset
+│   ├── layout.tsx                # Root layout
+│   ├── page.tsx                  # Landing page
+│   └── globals.css               # Global styles
+├── components/
+│   ├── map/                      # Map components
+│   │   ├── MapPicker.tsx         # Interactive map for selecting points
+│   │   └── MapView.tsx           # Read-only map display
+│   └── ui/                       # Reusable UI components
+│       ├── Button.tsx
+│       ├── Card.tsx
+│       ├── Input.tsx
+│       └── Textarea.tsx
+└── lib/
+    ├── api/                      # API client and types
+    │   ├── client.ts             # Axios client with auth
+    │   └── types.ts              # TypeScript types from backend
+    └── env/                      # Environment variable validation
+        ├── client.ts
+        └── server.ts
+```
+
+## 🔐 Authentication Flow
+
+1. **Registration**: Users create an account with username, email, and password
+2. **Login**: Authenticate and receive JWT access + refresh tokens
+3. **Token Storage**: Tokens stored in localStorage
+4. **Auto-Refresh**: Expired access tokens automatically refreshed
+5. **Protected Routes**: Dashboard pages require authentication
+
+## 🗺️ Features Guide
+
+### Creating a Report
+
+1. Navigate to **Dashboard** → **New Report**
+2. Enter report details:
+   - **Title**: Brief description of the damage
+   - **Subdistrict Code**: Indonesian administrative code (e.g., `35.10.02.2005`)
+   - **Location**: Click on the map to mark damaged road points
+   - **Photos**: Provide URLs to damage photos (one per line)
+   - **Description**: Additional details (optional)
+3. Click **Submit Report**
+
+### Viewing Reports
+
+- **Dashboard**: Overview with statistics
+- **All Reports**: Browse all submitted reports with pagination
+- **Filter**: Filter reports by status (Pending/Verified/Repaired)
+- **Details**: Click any report to see full details including map and photos
+
+## 🎨 Available Scripts
+
+```bash
+# Development
+pnpm dev              # Start dev server with Turbopack
+pnpm build            # Build for production
+pnpm start            # Start production server
+
+# Code Quality
+pnpm lint             # Run ESLint
+pnpm lint:fix         # Fix ESLint issues
+pnpm type-check       # Run TypeScript compiler
+pnpm format           # Format code with Prettier
+pnpm format:check     # Check formatting
+```
+
+## 🌐 API Integration
+
+The application communicates with the JalanRusak backend API. Key endpoints:
+
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `POST /auth/refresh` - Refresh access token
+- `POST /damaged-roads` - Create damage report
+- `GET /damaged-roads` - List reports (with pagination/filtering)
+- `GET /damaged-roads/:id` - Get report details
+- `PUT /damaged-roads/:id/status` - Update report status (verificators only)
+
+## 🔒 Environment Variables
+
+| Variable | Description | Required | Default |
+|----------|-------------|----------|---------|
+| `NEXT_PUBLIC_API_URL` | Backend API base URL | Yes | `http://localhost:8080/api/v1` |
+
+## 📱 Responsive Design
+
+- **Mobile**: Optimized for smartphones with touch-friendly controls
+- **Tablet**: Adaptive layout for medium screens
+- **Desktop**: Full-featured interface with multi-column layouts
+
+## 🐛 Troubleshooting
+
+### Map not loading
+- Check that Leaflet CSS is imported in `globals.css`
+- Ensure the component is client-side (`'use client'` directive)
+- Verify network connectivity
+
+### Authentication errors
+- Confirm backend API is running and accessible
+- Check `NEXT_PUBLIC_API_URL` in `.env.local`
+- Clear browser localStorage and try again
+
+### Type errors
+- Run `pnpm type-check` to identify issues
+- Ensure backend API types match the `types.ts` definitions
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Commit changes: `git commit -am 'Add new feature'`
+4. Push to branch: `git push origin feature/my-feature`
+5. Submit a Pull Request
+
+## 📄 License
+
+MIT License - see LICENSE.md for details
+
+## 🙏 Acknowledgments
+
+- **Backend**: JalanRusak Go backend service
+- **Maps**: OpenStreetMap contributors
+- **Starter**: Based on [typescript-nextjs-starter](https://github.com/jpedroschmitz/typescript-nextjs-starter)
+
+---
+
+**JalanRusak** - Making Indonesian roads safer, one report at a time 🛣️
 
 ```
 # pnpm
