@@ -21,13 +21,15 @@ export default function ReportDetailPage() {
   const [error, setError] = useState<string>('');
 
   // Convert geometry coordinates to PointDTO format
-  // Backend returns [longitude, latitude] pairs, convert to {latitude, longitude}
+  // Backend returns [longitude, latitude] pairs, convert to {latitude, longitude}.
+  // Deduplicate consecutive identical coords produced by single-point (quick) reports.
   const pathPoints = useMemo<PointDTO[]>(() => {
     if (!report?.path?.coordinates) return [];
-    return report.path.coordinates.map((coord) => ({
-      lat: coord[1],
-      lng: coord[0],
+    const mapped = report.path.coordinates.map((coord) => ({
+      lat: coord[1]!,
+      lng: coord[0]!,
     }));
+    return mapped.filter((p, i) => i === 0 || p.lat !== mapped[i - 1]!.lat || p.lng !== mapped[i - 1]!.lng);
   }, [report]);
 
   useEffect(() => {
