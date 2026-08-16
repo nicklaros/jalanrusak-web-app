@@ -7,6 +7,8 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Polyline, TileLayer, useMapEvents } from 'react-leaflet';
 
+import { fetchRoadRoute } from '@/lib/map/routing';
+
 import type { PointDTO } from '@/lib/api/types';
 
 // Fix for default marker icon
@@ -34,8 +36,8 @@ function MapClickHandler({
   useMapEvents({
     click(e) {
       const newPoint: PointDTO = {
-        latitude: e.latlng.lat,
-        longitude: e.latlng.lng,
+        lat: e.latlng.lat,
+        lng: e.latlng.lng,
       };
       onPointsChange([...points, newPoint]);
     },
@@ -45,10 +47,19 @@ function MapClickHandler({
 
 export function MapPicker({ points, onPointsChange, center = [-6.2088, 106.8456], zoom = 13 }: MapPickerProps) {
   const [isMounted, setIsMounted] = useState(false);
+  const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (points.length >= 2) {
+      fetchRoadRoute(points).then(setRouteCoords);
+    } else {
+      setRouteCoords([]);
+    }
+  }, [points]);
 
   const handleRemovePoint = (index: number) => {
     const newPoints = points.filter((_, i) => i !== index);
@@ -73,11 +84,16 @@ export function MapPicker({ points, onPointsChange, center = [-6.2088, 106.8456]
         <MapClickHandler onPointsChange={onPointsChange} points={points} />
 
         {points.map((point, index) => (
-          <Marker key={index} position={[point.latitude, point.longitude]} />
+          <Marker key={index} position={[point.lat, point.lng]} />
         ))}
 
         {points.length > 1 && (
-          <Polyline positions={points.map((p) => [p.latitude, p.longitude])} color="red" weight={3} opacity={0.7} />
+          <Polyline
+            positions={routeCoords.length > 1 ? routeCoords : points.map((p) => [p.lat, p.lng])}
+            color="red"
+            weight={3}
+            opacity={0.7}
+          />
         )}
       </MapContainer>
 
@@ -88,7 +104,7 @@ export function MapPicker({ points, onPointsChange, center = [-6.2088, 106.8456]
             {points.map((point, index) => (
               <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded text-sm">
                 <span className="text-gray-700">
-                  Point {index + 1}: {point.latitude.toFixed(6)}, {point.longitude.toFixed(6)}
+                  Point {index + 1}: {point.lat.toFixed(6)}, {point.lng.toFixed(6)}
                 </span>
                 <button
                   type="button"

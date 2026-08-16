@@ -25,8 +25,8 @@ export default function ReportDetailPage() {
   const pathPoints = useMemo<PointDTO[]>(() => {
     if (!report?.path?.coordinates) return [];
     return report.path.coordinates.map((coord) => ({
-      latitude: coord[1],
-      longitude: coord[0],
+      lat: coord[1],
+      lng: coord[0],
     }));
   }, [report]);
 
@@ -53,12 +53,18 @@ export default function ReportDetailPage() {
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case 'pending':
+      case 'submitted':
         return 'bg-yellow-100 text-yellow-800';
+      case 'under_verification':
+        return 'bg-orange-100 text-orange-800';
       case 'verified':
         return 'bg-blue-100 text-blue-800';
-      case 'repaired':
+      case 'pending_resolved':
+        return 'bg-purple-100 text-purple-800';
+      case 'resolved':
         return 'bg-green-100 text-green-800';
+      case 'archived':
+        return 'bg-gray-100 text-gray-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -153,7 +159,7 @@ export default function ReportDetailPage() {
               <div className="space-y-1 max-h-32 overflow-y-auto">
                 {pathPoints.map((point, index) => (
                   <p key={index} className="text-xs text-gray-600 font-mono">
-                    Point {index + 1}: {point.latitude.toFixed(6)}, {point.longitude.toFixed(6)}
+                    Point {index + 1}: {point.lat.toFixed(6)}, {point.lng.toFixed(6)}
                   </p>
                 ))}
               </div>

@@ -185,7 +185,7 @@ class ApiClient {
 
   async listDamagedRoads(params?: {
     page?: number;
-    per_page?: number;
+    limit?: number;
     status?: string;
     subdistrict_code?: string;
   }): Promise<DamagedRoadListResponse> {
@@ -194,7 +194,7 @@ class ApiClient {
   }
 
   async updateDamagedRoadStatus(id: string, data: UpdateStatusRequest): Promise<DamagedRoadResponse> {
-    const response = await this.client.put<DamagedRoadResponse>(`/damaged-roads/${id}/status`, data);
+    const response = await this.client.patch<DamagedRoadResponse>(`/damaged-roads/${id}/status`, data);
     return response.data;
   }
 

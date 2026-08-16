@@ -6,8 +6,8 @@ export interface Point {
 }
 
 export interface PointDTO {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lng: number;
 }
 
 export interface GeometryDTO {
@@ -19,7 +19,7 @@ export interface DamagedRoadResponse {
   id: string;
   author_id: string;
   title: string;
-  subdistrict_code: string;
+  subdistrict_code?: string;
   path: GeometryDTO;
   photo_urls: string[];
   description?: string;
@@ -30,9 +30,9 @@ export interface DamagedRoadResponse {
 
 export interface CreateDamagedRoadRequest {
   title: string;
-  subdistrict_code: string;
+  subdistrict_code?: string;
   path_points: PointDTO[];
-  photo_urls: string[];
+  photo_urls?: string[];
   description?: string;
 }
 

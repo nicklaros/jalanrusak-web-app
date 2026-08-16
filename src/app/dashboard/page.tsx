@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { QuickReportButton } from '@/components/ui/QuickReportButton';
 import { apiClient } from '@/lib/api/client';
 
 import type { DamagedRoadListResponse, UserProfile } from '@/lib/api/types';
@@ -26,10 +27,10 @@ export default function DashboardPage() {
       try {
         const [profile, allReports, submittedReports, verifiedReports, resolvedReports] = await Promise.all([
           apiClient.getProfile(),
-          apiClient.listDamagedRoads({ per_page: 1 }),
-          apiClient.listDamagedRoads({ status: 'submitted', per_page: 1 }),
-          apiClient.listDamagedRoads({ status: 'verified', per_page: 1 }),
-          apiClient.listDamagedRoads({ status: 'resolved', per_page: 1 }),
+          apiClient.listDamagedRoads({ limit: 1 }),
+          apiClient.listDamagedRoads({ status: 'submitted', limit: 1 }),
+          apiClient.listDamagedRoads({ status: 'verified', limit: 1 }),
+          apiClient.listDamagedRoads({ status: 'resolved', limit: 1 }),
         ]);
 
         setUser(profile);
@@ -102,23 +103,26 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <Card title="Quick Actions">
+          <div className="mb-4">
+            <QuickReportButton />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link href="/dashboard/reports/create">
-              <div className="p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors cursor-pointer">
+              <div className="p-4 border border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors cursor-pointer">
                 <div className="text-center">
-                  <span className="text-4xl mb-2 block">➕</span>
-                  <h3 className="text-lg font-semibold text-gray-900">Create New Report</h3>
-                  <p className="text-sm text-gray-600 mt-1">Report a new damaged road in your area</p>
+                  <span className="text-2xl mb-1 block">📝</span>
+                  <h3 className="text-sm font-semibold text-gray-900">Laporan Lengkap</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">Isi detail, foto, dan peta</p>
                 </div>
               </div>
             </Link>
 
             <Link href="/dashboard/reports">
-              <div className="p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors cursor-pointer">
+              <div className="p-4 border border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors cursor-pointer">
                 <div className="text-center">
-                  <span className="text-4xl mb-2 block">📝</span>
-                  <h3 className="text-lg font-semibold text-gray-900">View All Reports</h3>
-                  <p className="text-sm text-gray-600 mt-1">Browse and manage existing reports</p>
+                  <span className="text-2xl mb-1 block">📋</span>
+                  <h3 className="text-sm font-semibold text-gray-900">Semua Laporan</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">Lihat dan kelola laporan</p>
                 </div>
               </div>
             </Link>

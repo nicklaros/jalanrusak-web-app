@@ -7,6 +7,8 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Polyline, TileLayer } from 'react-leaflet';
 
+import { fetchRoadRoute } from '@/lib/map/routing';
+
 import type { PointDTO } from '@/lib/api/types';
 
 // Fix for default marker icon
@@ -25,10 +27,19 @@ interface MapViewProps {
 
 export function MapView({ points, center, zoom = 15 }: MapViewProps) {
   const [isMounted, setIsMounted] = useState(false);
+  const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (points.length >= 2) {
+      fetchRoadRoute(points).then(setRouteCoords);
+    } else {
+      setRouteCoords([]);
+    }
+  }, [points]);
 
   if (!isMounted) {
     return (
@@ -40,7 +51,7 @@ export function MapView({ points, center, zoom = 15 }: MapViewProps) {
 
   // Calculate center from points if not provided
   const mapCenter: [number, number] =
-    center || (points.length > 0 ? [points[0]!.latitude, points[0]!.longitude] : [-6.2088, 106.8456]);
+    center || (points.length > 0 ? [points[0]!.lat, points[0]!.lng] : [-6.2088, 106.8456]);
 
   return (
     <MapContainer center={mapCenter} zoom={zoom} className="h-96 rounded-lg z-0" scrollWheelZoom={true}>
@@ -50,12 +61,10 @@ export function MapView({ points, center, zoom = 15 }: MapViewProps) {
       />
 
       {points.map((point, index) => (
-        <Marker key={index} position={[point.latitude, point.longitude]} />
+        <Marker key={index} position={[point.lat, point.lng]} />
       ))}
 
-      {points.length > 1 && (
-        <Polyline positions={points.map((p) => [p.latitude, p.longitude])} color="red" weight={3} opacity={0.7} />
-      )}
+      {routeCoords.length > 1 && <Polyline positions={routeCoords} color="red" weight={3} opacity={0.7} />}
     </MapContainer>
   );
 }

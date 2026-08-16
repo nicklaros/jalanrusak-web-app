@@ -25,7 +25,7 @@ export default function ReportsListPage() {
     try {
       const response = await apiClient.listDamagedRoads({
         page,
-        per_page: 10,
+        limit: 10,
         ...(status && { status }),
       });
 
@@ -48,12 +48,18 @@ export default function ReportsListPage() {
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case 'pending':
+      case 'submitted':
         return 'bg-yellow-100 text-yellow-800';
+      case 'under_verification':
+        return 'bg-orange-100 text-orange-800';
       case 'verified':
         return 'bg-blue-100 text-blue-800';
-      case 'repaired':
+      case 'pending_resolved':
+        return 'bg-purple-100 text-purple-800';
+      case 'resolved':
         return 'bg-green-100 text-green-800';
+      case 'archived':
+        return 'bg-gray-100 text-gray-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -84,9 +90,12 @@ export default function ReportsListPage() {
               className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">All</option>
-              <option value="pending">Pending</option>
+              <option value="submitted">Submitted</option>
+              <option value="under_verification">Under Verification</option>
               <option value="verified">Verified</option>
-              <option value="repaired">Repaired</option>
+              <option value="pending_resolved">Pending Resolved</option>
+              <option value="resolved">Resolved</option>
+              <option value="archived">Archived</option>
             </select>
           </div>
         </Card>

@@ -19,9 +19,11 @@ const reportSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').max(100, 'Title is too long'),
   subdistrict_code: z
     .string()
-    .regex(/^\d{2}\.\d{2}\.\d{2}\.\d{4}$/, 'Invalid subdistrict code format (e.g., 35.10.02.2005)'),
+    .regex(/^(\d{2}\.\d{2}\.\d{2}\.\d{4})?$/, 'Invalid subdistrict code format (e.g., 35.10.02.2005)')
+    .optional()
+    .or(z.literal('')),
   description: z.string().max(500, 'Description is too long').optional(),
-  photo_urls: z.string().min(1, 'At least one photo URL is required'),
+  photo_urls: z.string().optional(),
 });
 
 type ReportFormData = z.infer<typeof reportSchema>;
@@ -77,21 +79,17 @@ export default function CreateReportPage() {
     try {
       // Split photo URLs by newline or comma
       const photoUrls = data.photo_urls
-        .split(/[,\n]/)
-        .map((url) => url.trim())
-        .filter((url) => url.length > 0);
-
-      if (photoUrls.length === 0) {
-        setError('Please provide at least one photo URL');
-        setIsLoading(false);
-        return;
-      }
+        ? data.photo_urls
+            .split(/[,\n]/)
+            .map((url) => url.trim())
+            .filter((url) => url.length > 0)
+        : [];
 
       await apiClient.createDamagedRoad({
         title: data.title,
-        subdistrict_code: data.subdistrict_code,
+        ...(data.subdistrict_code ? { subdistrict_code: data.subdistrict_code } : {}),
         path_points: points,
-        photo_urls: photoUrls,
+        ...(photoUrls.length > 0 ? { photo_urls: photoUrls } : {}),
         description: data.description,
       });
 
@@ -144,11 +142,11 @@ export default function CreateReportPage() {
             <Input
               {...register('subdistrict_code')}
               id="subdistrict_code"
-              label="Subdistrict Code"
+              label="Subdistrict Code (Optional)"
               type="text"
               placeholder="e.g., 35.10.02.2005"
               error={errors.subdistrict_code?.message}
-              helperText="Indonesian administrative area code (format: XX.XX.XX.XXXX)"
+              helperText="Indonesian administrative area code (format: XX.XX.XX.XXXX). Leave empty to assign later."
             />
 
             <div className="mb-4">
@@ -162,11 +160,11 @@ export default function CreateReportPage() {
             <Textarea
               {...register('photo_urls')}
               id="photo_urls"
-              label="Photo URLs"
+              label="Photo URLs (Optional)"
               rows={4}
-              placeholder="Enter photo URLs (one per line or comma-separated)&#10;https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg"
+              placeholder="Enter photo URLs (one per line or comma-separated)&#10;https://example.com/photo1.jpg"
               error={errors.photo_urls?.message}
-              helperText="Provide URLs to photos showing the damage (at least one required)"
+              helperText="Provide URLs to photos showing the damage"
             />
 
             <Textarea
