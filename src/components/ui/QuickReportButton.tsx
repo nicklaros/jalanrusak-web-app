@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { apiClient } from '@/lib/api/client';
+import { reverseGeocodeToTitle } from '@/lib/map/routing';
 
 type State = 'idle' | 'locating' | 'submitting' | 'success' | 'error';
 
@@ -41,8 +42,10 @@ export function QuickReportButton({ onSuccess }: QuickReportButtonProps) {
 
     setState('submitting');
 
+    // Geocode while already showing "submitting" state — date is the fallback
     const now = new Date();
-    const title = `Laporan Jalan Rusak - ${now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}`;
+    const dateTitle = `Kerusakan jalan - ${now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}`;
+    const title = await reverseGeocodeToTitle(coords.latitude, coords.longitude).catch(() => dateTitle) || dateTitle;
 
     try {
       const report = await apiClient.createDamagedRoad({

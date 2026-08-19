@@ -12,6 +12,7 @@ import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { apiClient } from '@/lib/api/client';
+import { reverseGeocodeToTitle } from '@/lib/map/routing';
 
 import type { PointDTO } from '@/lib/api/types';
 
@@ -33,6 +34,7 @@ export default function CreateReportPage() {
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [points, setPoints] = useState<PointDTO[]>([]);
+  const [isFetchingTitle, setIsFetchingTitle] = useState(false);
   const [mapCenter, setMapCenter] = useState<[number, number]>([-6.2088, 106.8456]); // Default: Jakarta
   const [locationError, setLocationError] = useState<string>('');
 
@@ -62,10 +64,32 @@ export default function CreateReportPage() {
   const {
     register,
     handleSubmit,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<ReportFormData>({
     resolver: zodResolver(reportSchema),
   });
+
+  const fetchTitleFromMap = async (point?: PointDTO) => {
+    const target = point ?? points[0];
+    if (!target) return;
+    setIsFetchingTitle(true);
+    try {
+      const suggested = await reverseGeocodeToTitle(target.lat, target.lng);
+      setValue('title', suggested, { shouldValidate: true });
+    } finally {
+      setIsFetchingTitle(false);
+    }
+  };
+
+  const handlePointsChange = (newPoints: PointDTO[]) => {
+    setPoints(newPoints);
+    // Auto-fill title only on the very first point if the field is still empty
+    if (newPoints.length === 1 && points.length === 0 && !getValues('title')) {
+      fetchTitleFromMap(newPoints[0]);
+    }
+  };
 
   const onSubmit = async (data: ReportFormData) => {
     if (points.length === 0) {
@@ -129,15 +153,48 @@ export default function CreateReportPage() {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              {...register('title')}
-              id="title"
-              label="Judul Laporan"
-              type="text"
-              placeholder="mis. Jalan berlubang di depan SDN 01"
-              error={errors.title?.message}
-              helperText="Ceritain singkat kerusakannya"
-            />
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                  Judul Laporan
+                </label>
+                {points.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => fetchTitleFromMap()}
+                    disabled={isFetchingTitle}
+                    className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 disabled:text-gray-400"
+                  >
+                    {isFetchingTitle ? (
+                      <>
+                        <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                        </svg>
+                        Mengambil...
+                      </>
+                    ) : (
+                      '↻ Isi dari lokasi peta'
+                    )}
+                  </button>
+                )}
+              </div>
+              <input
+                {...register('title')}
+                id="title"
+                type="text"
+                placeholder="mis. Jalan berlubang di depan SDN 01"
+                className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  errors.title ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+              {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>}
+              {!errors.title && (
+                <p className="mt-1 text-sm text-gray-500">
+                  {isFetchingTitle ? 'Mengambil nama lokasi dari peta...' : 'Ceritain singkat kerusakannya'}
+                </p>
+              )}
+            </div>
 
             <Input
               {...register('subdistrict_code')}
@@ -154,7 +211,7 @@ export default function CreateReportPage() {
               <p className="text-xs text-gray-500 mb-2">
                 Klik di peta buat tandain lokasi jalan rusak. Peta udah di-set ke lokasi kamu sekarang.
               </p>
-              <MapPicker points={points} onPointsChange={setPoints} center={mapCenter} zoom={15} />
+              <MapPicker points={points} onPointsChange={handlePointsChange} center={mapCenter} zoom={15} />
             </div>
 
             <Textarea
