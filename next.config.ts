@@ -14,6 +14,7 @@ const ContentSecurityPolicy = `
   base-uri 'self';
   frame-ancestors 'self';
   manifest-src 'self';
+  worker-src 'self';
   report-to default;
 `;
 

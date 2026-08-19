@@ -3,12 +3,11 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { QuickReportButton } from '@/components/ui/QuickReportButton';
 import { apiClient } from '@/lib/api/client';
 
-import type { DamagedRoadListResponse, UserProfile } from '@/lib/api/types';
+import type { UserProfile } from '@/lib/api/types';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -139,7 +138,7 @@ export default function DashboardPage() {
             <div className="mt-4 space-y-2">
               <h4 className="font-semibold text-gray-900">Gimana caranya:</h4>
               <ol className="list-decimal list-inside space-y-1 text-gray-700">
-                <li>Klik "Buat Laporan Baru" buat ngirim laporan jalan rusak</li>
+                <li>Klik &quot;Buat Laporan Baru&quot; buat ngirim laporan jalan rusak</li>
                 <li>Tandain area rusak di peta dengan klik untuk tambahin titik GPS</li>
                 <li>Tambahin foto dan detail kerusakan</li>
                 <li>Kirim laporan kamu buat diverifikasi</li>

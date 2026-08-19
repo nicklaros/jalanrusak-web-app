@@ -2,8 +2,8 @@ import axios from 'axios';
 
 import type { AxiosError, AxiosInstance } from 'axios';
 import type {
-  AuthResponse,
   AreaLevel,
+  AuthResponse,
   CreateDamagedRoadRequest,
   DamagedRoadListResponse,
   DamagedRoadResponse,

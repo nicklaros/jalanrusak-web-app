@@ -74,8 +74,7 @@ export default function TopAreasPage() {
             10 wilayah dengan laporan jalan rusak terkonfirmasi terbanyak yang belum diperbaiki
           </p>
           <p className="text-red-200 text-sm mt-2">
-            Data mencakup laporan berstatus <strong>terverifikasi</strong> dan{' '}
-            <strong>menunggu perbaikan</strong>
+            Data mencakup laporan berstatus <strong>terverifikasi</strong> dan <strong>menunggu perbaikan</strong>
           </p>
         </div>
       </div>
@@ -88,9 +87,7 @@ export default function TopAreasPage() {
               key={lvl.key}
               onClick={() => setActiveLevel(lvl.key)}
               className={`flex-1 min-w-max px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                activeLevel === lvl.key
-                  ? 'bg-red-700 text-white shadow'
-                  : 'text-gray-600 hover:bg-gray-100'
+                activeLevel === lvl.key ? 'bg-red-700 text-white shadow' : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
               {lvl.label}
@@ -111,9 +108,7 @@ export default function TopAreasPage() {
         )}
 
         {error && !isLoading && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center text-red-700">
-            {error}
-          </div>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center text-red-700">{error}</div>
         )}
 
         {!isLoading && !error && activeEntries.length === 0 && (
@@ -140,12 +135,8 @@ export default function TopAreasPage() {
 
                 {/* Area info */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 truncate">
-                    {entry.name ?? entry.code}
-                  </p>
-                  {entry.name && (
-                    <p className="text-xs text-gray-400 font-mono">{entry.code}</p>
-                  )}
+                  <p className="font-semibold text-gray-900 truncate">{entry.name ?? entry.code}</p>
+                  {entry.name && <p className="text-xs text-gray-400 font-mono">{entry.code}</p>}
                 </div>
 
                 {/* Count */}
