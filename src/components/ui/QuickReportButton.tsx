@@ -45,7 +45,7 @@ export function QuickReportButton({ onSuccess }: QuickReportButtonProps) {
     // Geocode while already showing "submitting" state — date is the fallback
     const now = new Date();
     const dateTitle = `Kerusakan jalan - ${now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}`;
-    const title = await reverseGeocodeToTitle(coords.latitude, coords.longitude).catch(() => dateTitle) || dateTitle;
+    const title = (await reverseGeocodeToTitle(coords.latitude, coords.longitude).catch(() => dateTitle)) || dateTitle;
 
     try {
       const report = await apiClient.createDamagedRoad({

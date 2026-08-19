@@ -21,7 +21,7 @@ export async function reverseGeocodeToTitle(lat: number, lng: number): Promise<s
   const prefix = 'Kerusakan jalan';
   try {
     const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=id`,
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=id`
     );
     if (!res.ok) return prefix;
     const data = (await res.json()) as NominatimReverseResponse;
