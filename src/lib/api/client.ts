@@ -3,6 +3,7 @@ import axios from 'axios';
 import type { AxiosError, AxiosInstance } from 'axios';
 import type {
   AuthResponse,
+  AreaLevel,
   CreateDamagedRoadRequest,
   DamagedRoadListResponse,
   DamagedRoadResponse,
@@ -14,6 +15,7 @@ import type {
   RegisterRequest,
   RegisterResponse,
   ResetPasswordRequest,
+  TopAreasListResponse,
   UpdateStatusRequest,
   UserProfile,
 } from './types';
@@ -195,6 +197,13 @@ class ApiClient {
 
   async updateDamagedRoadStatus(id: string, data: UpdateStatusRequest): Promise<DamagedRoadResponse> {
     const response = await this.client.patch<DamagedRoadResponse>(`/damaged-roads/${id}/status`, data);
+    return response.data;
+  }
+
+  async getTopDamagedAreas(level: AreaLevel): Promise<TopAreasListResponse> {
+    const response = await this.client.get<TopAreasListResponse>('/damaged-roads/top-areas', {
+      params: { level },
+    });
     return response.data;
   }
 

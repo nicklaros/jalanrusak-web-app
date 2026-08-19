@@ -53,6 +53,20 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Shame Board teaser */}
+        <div className="bg-red-700 text-white p-8 rounded-lg shadow-md text-center mb-8">
+          <p className="text-4xl mb-3">😤</p>
+          <h2 className="text-2xl font-bold mb-2">Papan Malu Jalan Rusak</h2>
+          <p className="text-red-100 mb-5">
+            Lihat 10 wilayah dengan laporan jalan rusak terkonfirmasi terbanyak yang belum diperbaiki
+          </p>
+          <Link href="/top-areas">
+            <Button variant="secondary" className="bg-white text-red-700 hover:bg-red-50">
+              Lihat Peringkat Wilayah →
+            </Button>
+          </Link>
+        </div>
+
         {/* How It Works */}
         <div className="bg-white p-8 rounded-lg shadow-md">
           <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">How It Works</h2>

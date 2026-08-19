@@ -112,3 +112,18 @@ export interface ErrorResponse {
   message?: string;
   details?: Record<string, unknown>;
 }
+
+export type AreaLevel = 'province' | 'city' | 'district' | 'subdistrict';
+
+export interface TopAreaEntry {
+  rank: number;
+  code: string;
+  name?: string;
+  level: AreaLevel;
+  report_count: number;
+}
+
+export interface TopAreasListResponse {
+  level: AreaLevel;
+  data: TopAreaEntry[];
+}
