@@ -35,7 +35,7 @@ export default function ReportsListPage() {
       setTotalPages(totalPages);
       setCurrentPage(response.pagination.page);
     } catch (err) {
-      setError('Failed to load reports. Please try again.');
+      setError('Aduh, gagal muat laporan. Coba lagi ya!');
       console.error('Fetch reports error:', err);
     } finally {
       setIsLoading(false);
@@ -70,18 +70,18 @@ export default function ReportsListPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Damage Reports</h1>
-            <p className="mt-2 text-gray-600">View and manage road damage reports</p>
+            <h1 className="text-3xl font-bold text-gray-900">Laporan Kerusakan</h1>
+            <p className="mt-2 text-gray-600">Pantau semua laporan jalan rusak kamu</p>
           </div>
           <Link href="/dashboard/reports/create">
-            <Button variant="primary">Create New Report</Button>
+            <Button variant="primary">Buat Laporan Baru</Button>
           </Link>
         </div>
 
         <Card className="mb-6">
           <div className="flex gap-4 items-center">
             <label htmlFor="status-filter" className="text-sm font-medium text-gray-700">
-              Filter by Status:
+              Filter berdasarkan Status:
             </label>
             <select
               id="status-filter"
@@ -89,13 +89,13 @@ export default function ReportsListPage() {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">All</option>
-              <option value="submitted">Submitted</option>
-              <option value="under_verification">Under Verification</option>
-              <option value="verified">Verified</option>
-              <option value="pending_resolved">Pending Resolved</option>
-              <option value="resolved">Resolved</option>
-              <option value="archived">Archived</option>
+              <option value="">Semua</option>
+              <option value="submitted">Dikirim</option>
+              <option value="under_verification">Sedang Diverifikasi</option>
+              <option value="verified">Terverifikasi</option>
+              <option value="pending_resolved">Menunggu Diselesaikan</option>
+              <option value="resolved">Selesai</option>
+              <option value="archived">Diarsipkan</option>
             </select>
           </div>
         </Card>
@@ -108,14 +108,14 @@ export default function ReportsListPage() {
 
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
-            <p className="text-gray-500">Loading reports...</p>
+            <p className="text-gray-500">Lagi muat laporan...</p>
           </div>
         ) : reports.length === 0 ? (
           <Card>
             <div className="text-center py-12">
-              <p className="text-gray-500 mb-4">No reports found</p>
+              <p className="text-gray-500 mb-4">Belum ada laporan nih 😅</p>
               <Link href="/dashboard/reports/create">
-                <Button variant="primary">Create Your First Report</Button>
+                <Button variant="primary">Yuk, buat laporan pertamamu!</Button>
               </Link>
             </div>
           </Card>
@@ -137,17 +137,17 @@ export default function ReportsListPage() {
 
                       <div className="space-y-1 text-sm text-gray-600 mb-3">
                         <p>
-                          <span className="font-medium">Subdistrict Code:</span> {report.subdistrict_code}
+                          <span className="font-medium">Kode Kelurahan:</span> {report.subdistrict_code}
                         </p>
                         <p>
-                          <span className="font-medium">Points:</span> {report.path.coordinates.length} location
-                          {report.path.coordinates.length > 1 ? 's' : ''} marked
+                          <span className="font-medium">Titik:</span> {report.path.coordinates.length} lokasi
+                          {report.path.coordinates.length > 1 ? '' : ''} ditandai
                         </p>
                         <p>
-                          <span className="font-medium">Photos:</span> {report.photo_urls.length} attached
+                          <span className="font-medium">Foto:</span> {report.photo_urls.length} terlampir
                         </p>
                         <p>
-                          <span className="font-medium">Submitted:</span> {format(new Date(report.created_at), 'PPpp')}
+                          <span className="font-medium">Dikirim:</span> {format(new Date(report.created_at), 'PPpp')}
                         </p>
                       </div>
 
@@ -156,7 +156,7 @@ export default function ReportsListPage() {
                       )}
 
                       <Link href={`/dashboard/reports/${report.id}`}>
-                        <Button variant="secondary">View Details</Button>
+                        <Button variant="secondary">Lihat Detail</Button>
                       </Link>
                     </div>
                   </div>
@@ -171,17 +171,17 @@ export default function ReportsListPage() {
                   disabled={currentPage === 1}
                   onClick={() => fetchReports(currentPage - 1, statusFilter)}
                 >
-                  Previous
+                  Sebelumnya
                 </Button>
                 <span className="px-4 py-2 text-sm text-gray-700">
-                  Page {currentPage} of {totalPages}
+                  Halaman {currentPage} dari {totalPages}
                 </span>
                 <Button
                   variant="secondary"
                   disabled={currentPage === totalPages}
                   onClick={() => fetchReports(currentPage + 1, statusFilter)}
                 >
-                  Next
+                  Berikutnya
                 </Button>
               </div>
             )}

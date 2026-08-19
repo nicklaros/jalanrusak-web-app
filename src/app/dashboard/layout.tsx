@@ -51,15 +51,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   const navItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { href: '/dashboard/reports', label: 'Reports', icon: '📝' },
-    { href: '/dashboard/reports/create', label: 'New Report', icon: '➕' },
+    { href: '/dashboard', label: 'Dasbor', icon: '📊' },
+    { href: '/dashboard/reports', label: 'Laporan', icon: '📝' },
+    { href: '/dashboard/reports/create', label: 'Laporan Baru', icon: '➕' },
   ];
 
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-gray-500">Sebentar ya... ⌛</p>
       </div>
     );
   }
@@ -101,7 +101,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
               )}
               <Button variant="secondary" onClick={handleLogout}>
-                Logout
+                Keluar
               </Button>
             </div>
 
@@ -144,7 +144,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
               )}
               <Button variant="secondary" onClick={handleLogout} fullWidth>
-                Logout
+                Keluar
               </Button>
             </div>
           </div>

@@ -55,7 +55,7 @@ export default function DashboardPage() {
       <div className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center py-12">
-            <p className="text-gray-500">Loading dashboard...</p>
+            <p className="text-gray-500">Sebentar ya, lagi loading... ⌛</p>
           </div>
         </div>
       </div>
@@ -66,8 +66,8 @@ export default function DashboardPage() {
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Welcome, {user?.name}!</h1>
-          <p className="mt-2 text-gray-600">Here's an overview of road damage reports</p>
+          <h1 className="text-3xl font-bold text-gray-900">Halo, {user?.name}! 👋</h1>
+          <p className="mt-2 text-gray-600">Ini ringkasan laporan jalan rusak kamu</p>
         </div>
 
         {/* Stats Grid */}
@@ -75,34 +75,34 @@ export default function DashboardPage() {
           <Card>
             <div className="text-center">
               <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
-              <p className="text-sm text-gray-600 mt-1">Total Reports</p>
+              <p className="text-sm text-gray-600 mt-1">Total Laporan</p>
             </div>
           </Card>
 
           <Card>
             <div className="text-center">
               <p className="text-3xl font-bold text-yellow-600">{stats.pending}</p>
-              <p className="text-sm text-gray-600 mt-1">Pending</p>
+              <p className="text-sm text-gray-600 mt-1">Menunggu</p>
             </div>
           </Card>
 
           <Card>
             <div className="text-center">
               <p className="text-3xl font-bold text-blue-600">{stats.verified}</p>
-              <p className="text-sm text-gray-600 mt-1">Verified</p>
+              <p className="text-sm text-gray-600 mt-1">Terverifikasi</p>
             </div>
           </Card>
 
           <Card>
             <div className="text-center">
               <p className="text-3xl font-bold text-green-600">{stats.repaired}</p>
-              <p className="text-sm text-gray-600 mt-1">Repaired</p>
+              <p className="text-sm text-gray-600 mt-1">Diperbaiki</p>
             </div>
           </Card>
         </div>
 
         {/* Quick Actions */}
-        <Card title="Quick Actions">
+        <Card title="Aksi Cepat">
           <div className="mb-4">
             <QuickReportButton />
           </div>
@@ -130,21 +130,20 @@ export default function DashboardPage() {
         </Card>
 
         {/* Info Section */}
-        <Card title="About JalanRusak" className="mt-8">
+        <Card title="Tentang JalanRusak" className="mt-8">
           <div className="prose max-w-none">
             <p className="text-gray-700">
-              JalanRusak is a citizen-driven platform that helps improve road infrastructure in Indonesia. By reporting
-              damaged roads, you're helping local authorities identify and prioritize repairs, making our roads safer
-              for everyone.
+              JalanRusak adalah platform warga buat melaporkan jalan rusak di Indonesia. Dengan laporan kamu, dinas
+              terkait bisa tahu mana yang perlu diperbaiki duluan — biar jalan makin aman buat semua! 🚗
             </p>
             <div className="mt-4 space-y-2">
-              <h4 className="font-semibold text-gray-900">How it works:</h4>
+              <h4 className="font-semibold text-gray-900">Gimana caranya:</h4>
               <ol className="list-decimal list-inside space-y-1 text-gray-700">
-                <li>Click "Create New Report" to submit a road damage report</li>
-                <li>Mark the damaged area on the map by clicking to add GPS coordinates</li>
-                <li>Add photos and details about the damage</li>
-                <li>Submit your report for verification</li>
-                <li>Track the status as authorities address the issue</li>
+                <li>Klik "Buat Laporan Baru" buat ngirim laporan jalan rusak</li>
+                <li>Tandain area rusak di peta dengan klik untuk tambahin titik GPS</li>
+                <li>Tambahin foto dan detail kerusakan</li>
+                <li>Kirim laporan kamu buat diverifikasi</li>
+                <li>Pantau statusnya sampai jalan diperbaiki!</li>
               </ol>
             </div>
           </div>

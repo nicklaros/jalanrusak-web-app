@@ -13,8 +13,8 @@ import { Input } from '@/components/ui/Input';
 import { apiClient } from '@/lib/api/client';
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  email: z.string().email('Alamat email tidak valid'),
+  password: z.string().min(8, 'Kata sandi minimal 8 karakter'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -40,7 +40,7 @@ export default function LoginPage() {
       await apiClient.login(data);
       router.push('/dashboard');
     } catch (err) {
-      setError('Invalid username or password. Please try again.');
+      setError('Email atau kata sandi salah nih. Coba lagi ya!');
       console.error('Login error:', err);
     } finally {
       setIsLoading(false);
@@ -52,11 +52,11 @@ export default function LoginPage() {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">JalanRusak</h1>
-          <p className="text-gray-600">Report damaged roads in your area</p>
+          <p className="text-gray-600">Yuk, laporkan jalan rusak di sekitar kamu! 🚧</p>
         </div>
 
         <Card>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Sign In</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Hai, selamat datang! 👋</h2>
 
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
@@ -70,7 +70,7 @@ export default function LoginPage() {
               id="email"
               label="Email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="Ketik email kamu"
               error={errors.email?.message}
               autoComplete="email"
             />
@@ -78,29 +78,29 @@ export default function LoginPage() {
             <Input
               {...register('password')}
               id="password"
-              label="Password"
+              label="Kata Sandi"
               type="password"
-              placeholder="Enter your password"
+              placeholder="Ketik kata sandi kamu"
               error={errors.password?.message}
               autoComplete="current-password"
             />
 
             <div className="flex items-center justify-between mb-6">
               <Link href="/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
-                Forgot password?
+                Lupa kata sandi?
               </Link>
             </div>
 
             <Button type="submit" variant="primary" fullWidth disabled={isLoading}>
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? 'Lagi masuk...' : 'Masuk Sekarang'}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Belum punya akun?{' '}
               <Link href="/register" className="text-blue-600 hover:text-blue-500 font-medium">
-                Sign up
+                Daftar yuk!
               </Link>
             </p>
           </div>

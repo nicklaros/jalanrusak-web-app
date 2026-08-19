@@ -14,18 +14,18 @@ import { apiClient } from '@/lib/api/client';
 
 const registerSchema = z
   .object({
-    name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
-    email: z.string().email('Invalid email address'),
+    name: z.string().min(1, 'Nama wajib diisi').max(255, 'Nama terlalu panjang'),
+    email: z.string().email('Alamat email tidak valid'),
     password: z
       .string()
-      .min(8, 'Password must be at least 8 characters')
-      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-      .regex(/[0-9]/, 'Password must contain at least one number'),
+      .min(8, 'Kata sandi minimal 8 karakter')
+      .regex(/[A-Z]/, 'Kata sandi harus mengandung huruf kapital')
+      .regex(/[a-z]/, 'Kata sandi harus mengandung huruf kecil')
+      .regex(/[0-9]/, 'Kata sandi harus mengandung angka'),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: 'Kata sandi tidak cocok',
     path: ['confirmPassword'],
   });
 
@@ -56,7 +56,7 @@ export default function RegisterPage() {
         email: data.email,
         password: data.password,
       });
-      setSuccess('Registration successful! Redirecting to login...');
+      setSuccess('Yeay, berhasil daftar! 🎉 Sebentar lagi kamu akan diarahkan ke halaman masuk...');
       setTimeout(() => {
         router.push('/login');
       }, 2000);
@@ -64,12 +64,10 @@ export default function RegisterPage() {
       if (err && typeof err === 'object' && 'response' in err) {
         const axiosError = err as { response?: { data?: { message?: string; error?: string } } };
         setError(
-          axiosError.response?.data?.message ||
-            axiosError.response?.data?.error ||
-            'Registration failed. Please try again.'
+          axiosError.response?.data?.message || axiosError.response?.data?.error || 'Duh, gagal daftar. Coba lagi ya!'
         );
       } else {
-        setError('Registration failed. Please try again.');
+        setError('Duh, gagal daftar. Coba lagi ya!');
       }
       console.error('Registration error:', err);
     } finally {
@@ -82,11 +80,11 @@ export default function RegisterPage() {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">JalanRusak</h1>
-          <p className="text-gray-600">Join us in making our roads safer</p>
+          <p className="text-gray-600">Yuk gabung dan bikin jalan makin aman! 🙌</p>
         </div>
 
         <Card>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Create Account</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Bikin Akun Baru</h2>
 
           {success && (
             <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
@@ -104,9 +102,9 @@ export default function RegisterPage() {
             <Input
               {...register('name')}
               id="name"
-              label="Full Name"
+              label="Nama Lengkap"
               type="text"
-              placeholder="Enter your full name"
+              placeholder="Nama kamu siapa?"
               error={errors.name?.message}
               autoComplete="name"
             />
@@ -116,7 +114,7 @@ export default function RegisterPage() {
               id="email"
               label="Email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="Email kamu"
               error={errors.email?.message}
               autoComplete="email"
             />
@@ -124,9 +122,9 @@ export default function RegisterPage() {
             <Input
               {...register('password')}
               id="password"
-              label="Password"
+              label="Kata Sandi"
               type="password"
-              placeholder="Create a password"
+              placeholder="Buat kata sandi yang kuat ya"
               error={errors.password?.message}
               autoComplete="new-password"
             />
@@ -134,23 +132,23 @@ export default function RegisterPage() {
             <Input
               {...register('confirmPassword')}
               id="confirmPassword"
-              label="Confirm Password"
+              label="Konfirmasi Kata Sandi"
               type="password"
-              placeholder="Confirm your password"
+              placeholder="Ketik ulang kata sandi kamu"
               error={errors.confirmPassword?.message}
               autoComplete="new-password"
             />
 
             <Button type="submit" variant="primary" fullWidth disabled={isLoading}>
-              {isLoading ? 'Creating account...' : 'Create Account'}
+              {isLoading ? 'Lagi bikin akun...' : 'Daftar Sekarang'}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
+              Sudah punya akun?{' '}
               <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
-                Sign in
+                Masuk
               </Link>
             </p>
           </div>

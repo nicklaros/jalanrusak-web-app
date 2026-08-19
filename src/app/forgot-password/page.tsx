@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/Input';
 import { apiClient } from '@/lib/api/client';
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.string().email('Alamat email tidak valid'),
 });
 
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
       await apiClient.forgotPassword(data);
       setSuccess(true);
     } catch (err) {
-      setError('Failed to send reset email. Please try again.');
+      setError('Hmm, gagal kirim email. Coba lagi ya!');
       console.error('Forgot password error:', err);
     } finally {
       setIsLoading(false);
@@ -51,11 +51,11 @@ export default function ForgotPasswordPage() {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">JalanRusak</h1>
-          <p className="text-gray-600">Reset your password</p>
+          <p className="text-gray-600">Tenang, kita bantu reset! 😊</p>
         </div>
 
         <Card>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Forgot Password</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Lupa Kata Sandi?</h2>
 
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
@@ -67,19 +67,19 @@ export default function ForgotPasswordPage() {
             <div className="mb-4">
               <div className="p-4 bg-green-50 border border-green-200 rounded-md mb-6">
                 <p className="text-sm text-green-600">
-                  If an account exists with that email, we've sent password reset instructions. Please check your inbox.
+                  Kalau emailmu terdaftar, kita udah kirim link reset kata sandi. Cek inbox atau folder spam kamu ya! 📩
                 </p>
               </div>
               <Link href="/login">
                 <Button variant="primary" fullWidth>
-                  Back to Sign In
+                  Kembali ke Halaman Masuk
                 </Button>
               </Link>
             </div>
           ) : (
             <>
               <p className="text-sm text-gray-600 mb-6">
-                Enter your email address and we'll send you instructions to reset your password.
+                Masukin emailmu dan kita kirimin link buat reset kata sandi kamu.
               </p>
 
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -88,19 +88,19 @@ export default function ForgotPasswordPage() {
                   id="email"
                   label="Email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Ketik email kamu"
                   error={errors.email?.message}
                   autoComplete="email"
                 />
 
                 <Button type="submit" variant="primary" fullWidth disabled={isLoading}>
-                  {isLoading ? 'Sending...' : 'Send Reset Link'}
+                  {isLoading ? 'Lagi kirim...' : 'Kirim Link Reset'}
                 </Button>
               </form>
 
               <div className="mt-6 text-center">
                 <Link href="/login" className="text-sm text-blue-600 hover:text-blue-500">
-                  Back to Sign In
+                  Kembali ke Halaman Masuk
                 </Link>
               </div>
             </>

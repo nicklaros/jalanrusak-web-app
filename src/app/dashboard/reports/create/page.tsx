@@ -16,13 +16,13 @@ import { apiClient } from '@/lib/api/client';
 import type { PointDTO } from '@/lib/api/types';
 
 const reportSchema = z.object({
-  title: z.string().min(3, 'Title must be at least 3 characters').max(100, 'Title is too long'),
+  title: z.string().min(3, 'Judul minimal 3 karakter').max(100, 'Judul terlalu panjang'),
   subdistrict_code: z
     .string()
-    .regex(/^(\d{2}\.\d{2}\.\d{2}\.\d{4})?$/, 'Invalid subdistrict code format (e.g., 35.10.02.2005)')
+    .regex(/^(\d{2}\.\d{2}\.\d{2}\.\d{4})?$/, 'Format kode kelurahan tidak valid (mis. 35.10.02.2005)')
     .optional()
     .or(z.literal('')),
-  description: z.string().max(500, 'Description is too long').optional(),
+  description: z.string().max(500, 'Deskripsi terlalu panjang').optional(),
   photo_urls: z.string().optional(),
 });
 
@@ -46,7 +46,7 @@ export default function CreateReportPage() {
         },
         (error) => {
           console.error('Error getting location:', error);
-          setLocationError('Could not get your location. Using default map center.');
+          setLocationError('Lokasi kamu nggak bisa diakses. Pakai peta default dulu ya.');
         },
         {
           enableHighAccuracy: true,
@@ -55,7 +55,7 @@ export default function CreateReportPage() {
         }
       );
     } else {
-      setLocationError('Geolocation is not supported by your browser.');
+      setLocationError('Browser kamu belum support geolokasi nih.');
     }
   }, []);
 
@@ -69,7 +69,7 @@ export default function CreateReportPage() {
 
   const onSubmit = async (data: ReportFormData) => {
     if (points.length === 0) {
-      setError('Please add at least one point on the map to mark the damaged road location');
+      setError('Tandai dulu lokasi jalan rusaknya di peta ya!');
       return;
     }
 
@@ -97,9 +97,9 @@ export default function CreateReportPage() {
     } catch (err) {
       if (err && typeof err === 'object' && 'response' in err) {
         const axiosError = err as { response?: { data?: { error?: string } } };
-        setError(axiosError.response?.data?.error || 'Failed to submit report. Please try again.');
+        setError(axiosError.response?.data?.error || 'Aduh, laporan gagal terkirim. Coba lagi ya!');
       } else {
-        setError('Failed to submit report. Please try again.');
+        setError('Aduh, laporan gagal terkirim. Coba lagi ya!');
       }
       console.error('Submit report error:', err);
     } finally {
@@ -111,8 +111,8 @@ export default function CreateReportPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Report Damaged Road</h1>
-          <p className="mt-2 text-gray-600">Help improve road conditions by reporting damage in your area</p>
+          <h1 className="text-3xl font-bold text-gray-900">Laporkan Jalan Rusak</h1>
+          <p className="mt-2 text-gray-600">Bantu bikin jalan makin aman dengan laporan kamu! 🙌</p>
         </div>
 
         <Card>
@@ -132,27 +132,27 @@ export default function CreateReportPage() {
             <Input
               {...register('title')}
               id="title"
-              label="Report Title"
+              label="Judul Laporan"
               type="text"
-              placeholder="e.g., Jalan berlubang di depan SDN 01"
+              placeholder="mis. Jalan berlubang di depan SDN 01"
               error={errors.title?.message}
-              helperText="Brief description of the damage"
+              helperText="Ceritain singkat kerusakannya"
             />
 
             <Input
               {...register('subdistrict_code')}
               id="subdistrict_code"
-              label="Subdistrict Code (Optional)"
+              label="Kode Kelurahan (Opsional)"
               type="text"
-              placeholder="e.g., 35.10.02.2005"
+              placeholder="mis. 35.10.02.2005"
               error={errors.subdistrict_code?.message}
-              helperText="Indonesian administrative area code (format: XX.XX.XX.XXXX). Leave empty to assign later."
+              helperText="Format: XX.XX.XX.XXXX — boleh dikosongkan dulu"
             />
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Damage Location Path</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Jalur Lokasi Kerusakan</label>
               <p className="text-xs text-gray-500 mb-2">
-                Click on the map to add points marking the damaged road. The map is centered on your current location.
+                Klik di peta buat tandain lokasi jalan rusak. Peta udah di-set ke lokasi kamu sekarang.
               </p>
               <MapPicker points={points} onPointsChange={setPoints} center={mapCenter} zoom={15} />
             </div>
@@ -160,29 +160,29 @@ export default function CreateReportPage() {
             <Textarea
               {...register('photo_urls')}
               id="photo_urls"
-              label="Photo URLs (Optional)"
+              label="URL Foto (Opsional)"
               rows={4}
-              placeholder="Enter photo URLs (one per line or comma-separated)&#10;https://example.com/photo1.jpg"
+              placeholder="Masukkan URL foto (satu per baris atau dipisahkan koma)&#10;https://example.com/foto1.jpg"
               error={errors.photo_urls?.message}
-              helperText="Provide URLs to photos showing the damage"
+              helperText="Lampirin foto biar laporannya makin kuat 📸"
             />
 
             <Textarea
               {...register('description')}
               id="description"
-              label="Additional Description (Optional)"
+              label="Deskripsi Tambahan (Opsional)"
               rows={4}
-              placeholder="e.g., Jalan berlubang sepanjang 50 meter, berbahaya untuk sepeda motor"
+              placeholder="mis. Jalan berlubang sepanjang 50 meter, berbahaya untuk sepeda motor"
               error={errors.description?.message}
-              helperText="Provide additional context or details about the damage"
+              helperText="Ceritain lebih lengkap kalau ada info tambahan"
             />
 
             <div className="flex gap-4">
               <Button type="button" variant="secondary" onClick={() => router.back()}>
-                Cancel
+                Batal
               </Button>
               <Button type="submit" variant="primary" disabled={isLoading}>
-                {isLoading ? 'Submitting...' : 'Submit Report'}
+                {isLoading ? 'Lagi kirim...' : 'Kirim Laporan 🚀'}
               </Button>
             </div>
           </form>

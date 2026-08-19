@@ -41,7 +41,7 @@ export default function ReportDetailPage() {
         const data = await apiClient.getDamagedRoad(reportId);
         setReport(data);
       } catch (err) {
-        setError('Failed to load report details. Please try again.');
+        setError('Aduh, gagal muat detail laporan. Coba lagi ya!');
         console.error('Fetch report error:', err);
       } finally {
         setIsLoading(false);
@@ -77,7 +77,7 @@ export default function ReportDetailPage() {
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center py-12">
-            <p className="text-gray-500">Loading report...</p>
+            <p className="text-gray-500">Lagi muat laporan... ⌛</p>
           </div>
         </div>
       </div>
@@ -90,12 +90,12 @@ export default function ReportDetailPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <Button variant="secondary" onClick={() => router.back()}>
-              ← Back
+              ← Kembali
             </Button>
           </div>
           <Card>
             <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-600">{error || 'Report not found'}</p>
+              <p className="text-sm text-red-600">{error || 'Laporan tidak ditemukan'}</p>
             </div>
           </Card>
         </div>
@@ -108,7 +108,7 @@ export default function ReportDetailPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <Button variant="secondary" onClick={() => router.back()}>
-            ← Back to Reports
+            ← Kembali ke Laporan
           </Button>
         </div>
 
@@ -124,21 +124,22 @@ export default function ReportDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-gray-600">
-                  <span className="font-medium">Report ID:</span> {report.id}
+                  <span className="font-medium">ID Laporan:</span> {report.id}
                 </p>
                 <p className="text-gray-600">
-                  <span className="font-medium">Subdistrict Code:</span> {report.subdistrict_code}
+                  <span className="font-medium">Kode Kelurahan:</span> {report.subdistrict_code}
                 </p>
                 <p className="text-gray-600">
-                  <span className="font-medium">Submitted:</span> {format(new Date(report.created_at), 'PPpp')}
+                  <span className="font-medium">Dikirim:</span> {format(new Date(report.created_at), 'PPpp')}
                 </p>
               </div>
               <div>
                 <p className="text-gray-600">
-                  <span className="font-medium">Last Updated:</span> {format(new Date(report.updated_at), 'PPpp')}
+                  <span className="font-medium">Terakhir Diperbarui:</span>{' '}
+                  {format(new Date(report.updated_at), 'PPpp')}
                 </p>
                 <p className="text-gray-600">
-                  <span className="font-medium">Author ID:</span> {report.author_id}
+                  <span className="font-medium">ID Penulis:</span> {report.author_id}
                 </p>
               </div>
             </div>
@@ -146,22 +147,22 @@ export default function ReportDetailPage() {
 
           {report.description && (
             <div className="mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Description</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">Deskripsi</h2>
               <p className="text-gray-700">{report.description}</p>
             </div>
           )}
 
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Location Map</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-3">Peta Lokasi</h2>
             <MapView points={pathPoints} />
             <div className="mt-3">
               <p className="text-sm text-gray-600 mb-2">
-                <span className="font-medium">Coordinates ({pathPoints.length} points):</span>
+                <span className="font-medium">Koordinat ({pathPoints.length} titik):</span>
               </p>
               <div className="space-y-1 max-h-32 overflow-y-auto">
                 {pathPoints.map((point, index) => (
                   <p key={index} className="text-xs text-gray-600 font-mono">
-                    Point {index + 1}: {point.lat.toFixed(6)}, {point.lng.toFixed(6)}
+                    Titik {index + 1}: {point.lat.toFixed(6)}, {point.lng.toFixed(6)}
                   </p>
                 ))}
               </div>
@@ -169,11 +170,11 @@ export default function ReportDetailPage() {
           </div>
 
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Photos ({report.photo_urls.length})</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-3">Foto ({report.photo_urls.length})</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {report.photo_urls.map((url, index) => (
                 <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
-                  <img src={url} alt={`Damage photo ${index + 1}`} className="w-full h-64 object-cover" />
+                  <img src={url} alt={`Foto kerusakan ${index + 1}`} className="w-full h-64 object-cover" />
                   <div className="p-2 bg-gray-50">
                     <a
                       href={url}
